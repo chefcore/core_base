@@ -17,6 +17,6 @@ depends 'core_monitoring'
 depends 'yum-epel'
 depends 'apt'
 
-%w{ debian ubuntu centos redhat windows }.each do |os|
+%w(debian ubuntu centos redhat windows).each do |os|
   supports os
 end

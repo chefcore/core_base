@@ -5,14 +5,14 @@ ChefCore::Output.report "os_version (#{node['os_version']})"
 
 # Linux vs Windows
 case node['os']
-  when 'linux'
-    ChefCore::Output.report 'OS Family = Linux'
-    include_recipe 'core_base::linux'
-  when 'windows'
-    ChefCore::Output.report 'OS Family = Windows'
-    include_recipe 'core_base::windows'
-  else
-    ChefCore::Output.break 'OS Family = Unknown'
+when 'linux'
+  ChefCore::Output.report 'OS Family = Linux'
+  include_recipe 'core_base::linux'
+when 'windows'
+  ChefCore::Output.report 'OS Family = Windows'
+  include_recipe 'core_base::windows'
+else
+  ChefCore::Output.break 'OS Family = Unknown'
 end
 
 include_recipe 'core_security::policies' if node['core_base']['setup_policies']
