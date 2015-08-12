@@ -1,5 +1,3 @@
-# rubocop:disable Metrics/LineLength
-
 # Determine Environment
 # node.run_state['environment'] = ChefCore::EnvDetector.get_current(node)
 

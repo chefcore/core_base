@@ -1,5 +1,3 @@
-# rubocop:disable Metrics/LineLength
-
 # Linux Defaults
 default['core_base']['linux']['setup_mounts'] = true
 default['core_base']['linux']['setup_repos'] = true
