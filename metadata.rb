@@ -1,8 +1,8 @@
 # rubocop:disable Style/SingleSpaceBeforeFirstArg
 
 name             'core_base'
-maintainer       'Bonus Bits'
-maintainer_email 'levon.becker.github@bonusbits.com'
+maintainer       'Chef Core Team'
+maintainer_email 'levon.becker@chefcore.com'
 license          'MIT'
 description      'Foundation Wrapper Cookbook for all Nodes'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
