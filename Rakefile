@@ -1,21 +1,34 @@
+require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 require 'foodcritic'
 
 # Style tests. Rubocop and Foodcritic
 namespace :style do
-  desc 'Run Ruby style checks'
+  desc 'RuboCop'
   RuboCop::RakeTask.new(:ruby)
 
-  desc 'Run Chef style checks'
+  desc 'FoodCritic'
   FoodCritic::Rake::LintTask.new(:chef) do |t|
     t.options = {
-      fail_tags: ['any']
+      fail_tags: ['correctness'],
+      chef_version: '12.4.3',
+      tags: %w(~FC001 ~FC019)
     }
   end
 end
 
-desc 'Run all style checks'
-task style: ['style:chef', 'style:ruby']
+# Rspec and ChefSpec
+desc 'Run ChefSpec examples'
+RSpec::Core::RakeTask.new(:spec)
 
-desc 'Run lint tests on Travis'
-task travis: ['style']
+desc 'Lint Tests (FoodCritic and RuboCop)'
+task lint: %w(style:chef style:ruby)
+
+desc 'Unit Tests (Rspec & ChefSpec)'
+task unit: %w(spec)
+
+desc 'CI Tests (FoodCritic and RuboCop)'
+task ci: %w(style:chef style:ruby)
+
+desc 'Default Tests (FoodCritic and RuboCop)'
+task default: %w(style:chef style:ruby)

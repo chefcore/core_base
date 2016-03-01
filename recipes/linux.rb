@@ -1,31 +1,47 @@
-# Linux Distro Specific
-case node['platform']
+platform = node['platform']
+install_base_list = node['core_base']['linux']['packages']['install_base_list']
+install_epel_list = node['core_base']['linux']['packages']['install_epel_list']
+package_action = node['core_base']['linux']['packages']['action'].to_sym
+deb_package_list = node['core_base']['linux']['packages']['deb_package_list']
+rh_package_list = node['core_base']['linux']['packages']['rh_package_list']
+rh_epel_package_list = node['core_base']['linux']['packages']['rh_epel_package_list']
+suse_package_list = node['core_base']['linux']['packages']['suse_package_list']
+
+# Install Base Packages
+ChefCore::Output.report "OS Platform (#{platform})"
+case platform
 when 'debian', 'ubuntu'
-  ChefCore::Output.report 'OS = Ubuntu or Debian'
   include_recipe 'apt'
-  # Install Base Packages
-  package_list = %w(vim htop)
-  package_list.each do |package|
-    apt_package package do
-      action :install
+  package deb_package_list do
+    action package_action
+    only_if { install_base_list }
+  end
+when 'redhat', 'centos', 'amazon'
+  if node['core_base']['linux']['repos']['setup_epel']
+    include_recipe 'yum-epel'
+    package rh_epel_package_list do
+      action package_action
+      only_if { install_epel_list }
     end
   end
-when 'redhat', 'centos', 'fedora'
-  ChefCore::Output.report 'OS = redhat, centos or fedora'
-  include_recipe 'yum-epel'
-  # Install Base Packages
-  package_list = %w(vim htop mlocate)
-  package_list.each do |package|
-    yum_package package do
-      action :install
-      flush_cache [:before]
-    end
+  package rh_package_list do
+    action package_action
+    only_if { install_base_list }
+  end
+when 'suse', 'opensuse'
+  package suse_package_list do
+    action package_action
+    only_if { install_base_list }
   end
 else
-  ChefCore::Output.report "OS = Unknown (#{node['platform']})"
+  ChefCore::Output.break "OS Platform Unknown (#{platform})"
 end
 
-# core_library_filesystem 'Mount Linux Shares' do
-#   action :linux_mounts
-#   only_if { node['core_base']['linux']['setup_mounts'] }
-# end
+# Deploy Node Info Script
+template '/usr/bin/nodeinfo' do
+  source 'nodeinfo.sh.erb'
+  owner 'root'
+  group 'root'
+  mode 00755
+  only_if { node['core_base']['linux']['nodeinfo_script']['deploy'] }
+end

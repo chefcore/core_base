@@ -2,11 +2,11 @@
 
 name             'core_base'
 maintainer       'Bonus Bits'
-maintainer_email 'devops@bonusbits.com'
+maintainer_email 'levon.becker.github@bonusbits.com'
 license          'MIT'
 description      'Foundation Wrapper Cookbook for all Nodes'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.0.0'
+version          '1.0.1'
 
 recipe 'core_base', 'Every node lands here and is ran through conditions for basic configurations'
 
@@ -17,6 +17,13 @@ depends 'core_monitoring'
 depends 'yum-epel'
 depends 'apt'
 
-%w(debian ubuntu centos redhat windows).each do |os|
+%w(
+  amazon
+  debian
+  ubuntu
+  centos
+  redhat
+  windows
+).each do |os|
   supports os
 end

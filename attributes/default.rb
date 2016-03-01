@@ -1,5 +1,10 @@
 # Determine Environment
-# node.run_state['environment'] = ChefCore::EnvDetector.get_current(node)
+run_state['detected_environment'] =
+    if /dev|qa|stg|prd/.match(node.environment)
+      /dev|qa|stg|prd/.match(node.environment).to_s.downcase
+    else
+      'dev' # For when environment is default Chef-Zero/Chef-Solo just consider it Dev
+    end
 
 # Defaults
 default['core_base']['setup_policies'] = true
